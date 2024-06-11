@@ -48,15 +48,17 @@ int main(void)
             continue;
         }
 
-        int32_t sound_value = buf[0]; // 첫 번째 버퍼 값 읽기
-        if (sound_value >= SENSOR_INVALID_VALUE) {
-            printk("sound_value: invalid data %" PRIu32 "\n", sound_value);
+        // 버퍼의 첫 번째 값을 읽어 sound_value로 저장
+        int32_t sound_value = buf[0]; 
+        // sound_value가 부호 없는 정수로 잘못 해석되는 경우를 방지
+        if (sound_value < 0 || sound_value >= SENSOR_INVALID_VALUE) {
+            printk("sound_value: invalid data %" PRIi32 "\n", sound_value);
             k_sleep(K_MSEC(100));
             continue;
         }
 
         int sound_level = map(sound_value, MIN_SENSORVALUE, MAX_SENSORVALUE, 0, 100); // 0-100 범위로 매핑
-        printk("sound_value: %" PRIu32 " sound_level: %d\n", sound_value, sound_level);
+        printk("sound_value: %" PRIi32 " sound_level: %d\n", sound_value, sound_level);
         k_sleep(K_MSEC(100));
     }
     return 0;
