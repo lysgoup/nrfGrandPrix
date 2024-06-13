@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "zephyr.h": "c",
+    "spi.h": "c",
+    "gpio.h": "c"
+  },
+  "nrf-connect.applications": [
+    "${workspaceFolder}"
+  ]
+}
