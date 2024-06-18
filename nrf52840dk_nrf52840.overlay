@@ -1,0 +1,13 @@
+&pwm0 {
+    status = "okay";
+    pinctrl-0 = <&pwm0_default>;
+    pinctrl-names = "default";
+};
+
+&pwm0_default {
+    group1 {
+        pinctrl {
+            nrf_pwm_pins = <24>;
+        };
+    };
+};
