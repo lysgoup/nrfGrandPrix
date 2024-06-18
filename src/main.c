@@ -3,8 +3,8 @@
 #include <zephyr/devicetree.h>
 #include <zephyr/sys/util.h>
 
-#include "led.h"
-#include "value.h"
+#include "./led.h"
+#include "./value.h"
 
 struct k_timer my_timer;
 struct k_work my_work;

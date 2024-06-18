@@ -1,5 +1,5 @@
-#include "led.h"
-#include "value.h"
+#include "./led.h"
+#include "./value.h"
 
 int number_led_matrix_arr [MAX_LED_MATRIX_IDX+1][MAX_LED_MATRIX_NUM+1];
 
