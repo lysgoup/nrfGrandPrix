@@ -6,17 +6,17 @@ struct k_work my_work;
 
 int seconds = 0;
 bool timer_stopped = true;
-double timer_period = 0.2;
+double timer_period = 0.1;
 int game_duration = 5; // the time for lasting game - current: 30s
 
 void my_work_handler(struct k_work *work)
 {
-    printk("Time: %d\n", seconds);
 
-    led_on_seconds(seconds);
+    int ret = show_map(seconds);
 
     seconds++; 
-    if (seconds > game_duration * (1/timer_period)) { // 30초가 지나면 종료. 1/timer_period -> 0.2s에 한 번씩 seconds 증가하므로
+    //if (seconds > game_duration * (1/timer_period)) { // 30초가 지나면 종료. 1/timer_period -> 0.2s에 한 번씩 seconds 증가하므로
+    if(ret == -1){
         seconds = 0;
         led_on_status(PASS);
         led_blink_status(PASS, BLINK_ON_TIME, BLINK_OFF_TIME);

@@ -6,6 +6,8 @@
 #define MAX_LED_MATRIX_IDX 10
 #define MAX_LED_NUM 128
 #define MAX_LED_MATRIX_NUM 64
+#define MAX_LED_MATRIX_COL 16
+#define MAX_LED_MATRIX_ROW 8
 
 #define TENS_START_INDEX 0
 #define UNITS_START_INDEX 8
@@ -26,3 +28,4 @@ int led_init(void);
 void led_on_seconds(int seconds);
 void led_on_status(int type);
 void led_blink_status(int type, uint32_t on_time, uint32_t off_time);
+int show_map(int second);
