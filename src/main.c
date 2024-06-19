@@ -16,7 +16,8 @@ void my_work_handler(struct k_work *work)
         printk("Time: %d\n", seconds);
 
         // Display the time on the LED matrix
-        led_on_seconds(seconds);
+        // led_on_seconds(seconds);
+				led_on_result();
 
         // Increment the seconds
         seconds++;
