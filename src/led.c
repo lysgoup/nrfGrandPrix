@@ -20,10 +20,10 @@ int led_init(void)
     return DK_OK;
 }
 
-void led_on_seconds(int seconds)
+void led_on_seconds(int num)
 {
-    int tens = seconds / 10;
-    int units = seconds % 10;
+    int tens = num / 10;
+    int units = num % 10;
 
     int num_arr_idx = 0;
 

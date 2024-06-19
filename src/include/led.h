@@ -19,6 +19,10 @@
 #define PASS 1
 #define FAIL 2
 
+#define TOP 0
+#define MID 1
+#define BOT 2
+
 #define BLINK_ON_TIME 500
 #define BLINK_OFF_TIME 500
 

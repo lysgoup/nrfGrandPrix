@@ -18,9 +18,9 @@ int main(void)
 
         // LED and buttons configuration (NRF52840's)
         ret = gpio_init();
-	if (ret != DK_OK) {
-		return DK_ERR;
-	}
+        if (ret != DK_OK) {
+            return DK_ERR;
+        }
 
         // LED Matrix configuration
         ret = led_init();

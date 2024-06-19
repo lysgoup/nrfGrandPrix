@@ -1,7 +1,9 @@
 #include <zephyr/sys/util.h>
 
 #include "./include/gpios.h"
-#include "./Include/timer.h"
+#include "./include/timer.h"
+#include "./include/led.h"
+
 
 static struct gpio_callback button0_cb_data; // Game 진입
 static struct gpio_callback button1_cb_data;
