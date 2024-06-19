@@ -1,9 +1,8 @@
-#include "./led.h"
-#include "./value.h"
+#include "./include/led.h"
+#include "./include/value.h"
 
 int number_led_matrix_arr [MAX_LED_MATRIX_IDX+1][MAX_LED_MATRIX_NUM+1];
-int fail_led_matrix_arr [2][MAX_LED_MATRIX_NUM+1];
-int pass_led_matrix_arr [2][MAX_LED_MATRIX_NUM+1];
+int led_matrix_arr [3][MAX_LED_NUM+1];
 
 // Function to initialize the LED matrix
 int led_init(void)
@@ -55,80 +54,58 @@ void led_on_seconds(int seconds)
     }
 }
 
-void led_on_result(){
-    int num_arr_idx = 0;
-
-    for(int i = 0; i < MAX_LED_NUM; i+=16){
-        for(int j = i; j < (i+8); j++){
-            if(pass_led_matrix_arr[0][num_arr_idx] == 1){
-                // printk("[tens] led_on: j:[%d] num_array_idx[%d]\n", j, num_arr_idx);
-                led_on(led, j);
-            } else {
-                led_off(led, j);
-            }
-
-            num_arr_idx++;
-        }
-    }
-
-    num_arr_idx = 0;
-
-    for(int i = 0; i < MAX_LED_NUM; i+=16){
-        for(int j = (i+8); j < (i+16); j++){
-            if(pass_led_matrix_arr[1][num_arr_idx] == 1){
-                // printk("[units] led_on: j:[%d] num_array_idx[%d]\n", j, num_arr_idx);
-                led_on(led, j);
-            } else {
-                led_off(led, j);
-            }
-            num_arr_idx++;
+void led_on_status(int type){
+    for(int i = 0; i < MAX_LED_NUM; i++){
+        if(led_matrix_arr[type][i] == 1){
+            // printk("[tens] led_on: j:[%d] num_array_idx[%d]\n", j, num_arr_idx);
+            led_on(led, i);
+        } else {
+            led_off(led, i);
         }
     }
 }
 
-int pass_led_matrix_arr [2][MAX_LED_MATRIX_NUM+1]= {
-    {//FA
-        0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,
-        1,1,1,0,0,1,1,0,
-        1,0,0,1,1,0,0,1,
-        1,1,1,0,1,1,1,1,
-        1,0,0,0,1,0,0,1,
-        1,0,0,0,1,0,0,1,
-        0,0,0,0,0,0,0,0
-    },
-    {//IL
-        0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,
-        1,1,1,1,1,1,1,1,
-        1,0,0,0,1,0,0,0,
-        1,1,1,1,1,1,1,1,
-        0,0,0,1,0,0,0,1,
-        1,1,1,1,1,1,1,1,
-        0,0,0,0,0,0,0,0
+void led_blink_status(int type, uint32_t on_time, uint32_t off_time){
+    for(int i = 0 ; i <=MAX_LED_NUM; i++){
+        if(led_matrix_arr[type][i]){
+            led_blink(led, i, on_time, off_time);
+        }
     }
-};
+    k_msleep(5000);
+    led_blink(led, 0, 0, 0);
+}
 
-int fail_led_matrix_arr [2][MAX_LED_MATRIX_NUM+1]= {
-    {//FA
-        0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,
-        1,1,1,1,0,1,0,0,
-        1,0,0,0,1,0,1,0,
-        1,1,1,0,1,1,1,0,
-        1,0,0,1,0,0,0,1,
-        1,0,0,1,0,0,0,1,
-        0,0,0,0,0,0,0,0
+
+int led_matrix_arr [3][MAX_LED_NUM+1]= {
+    {//WAIT
+        0,0,0,0,0, 0,0,0,0, 0, 0,0,0, 0,0,0,
+        0,0,0,0,0, 0,0,0,0, 0, 0,0,0, 0,0,0,
+        1,0,1,0,1, 0,1,1,0, 0, 1,1,1, 1,1,1,
+        1,0,1,0,1, 1,0,0,1, 0, 0,1,0, 0,1,0,
+        1,0,1,0,1, 1,1,1,1, 0, 0,1,0, 0,1,0,
+        1,0,1,0,1, 1,0,0,1, 0, 0,1,0, 0,1,0,
+        0,1,0,1,0, 1,0,0,1, 0, 1,1,1, 0,1,0,
+        0,0,0,0,0, 0,0,0,0, 0, 0,0,0, 0,0,0
     },
-    {//IL
-        0,0,0,0,0,0,0,0,
-        0,0,0,0,0,0,0,0,
-        1,1,1,0,1,0,0,0,
-        0,1,0,0,1,0,0,0,
-        0,1,0,0,1,0,0,0,
-        0,1,0,0,1,0,0,0,
-        1,1,1,0,1,1,1,1,
-        0,0,0,0,0,0,0,0
+    {//PASS
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        1,1,1,0,0,1,1,0,1,1,1,1,1,1,1,1,
+        1,0,0,1,1,0,0,1,1,0,0,0,1,0,0,0,
+        1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,
+        1,0,0,0,1,0,0,1,0,0,0,1,0,0,0,1,
+        1,0,0,0,1,0,0,1,1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    },
+    {//FAIL
+        0,0,0,0,0,0,0,0, 0,0,0,0, 0,0,0,0,
+        0,0,0,0,0,0,0,0, 0,0,0,0, 0,0,0,0,
+        1,1,1,1,0,1,0,0, 1,1,1,0, 1,0,0,0,
+        1,0,0,0,1,0,1,0, 0,1,0,0, 1,0,0,0,
+        1,1,1,0,1,1,1,0, 0,1,0,0, 1,0,0,0,
+        1,0,0,1,0,0,0,1, 0,1,0,0, 1,0,0,0,
+        1,0,0,1,0,0,0,1, 1,1,1,0, 1,1,1,1,
+        0,0,0,0,0,0,0,0, 0,0,0,0, 0,0,0,0
     }
 };
 
