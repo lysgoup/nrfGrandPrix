@@ -2,6 +2,8 @@
 #include "./value.h"
 
 int number_led_matrix_arr [MAX_LED_MATRIX_IDX+1][MAX_LED_MATRIX_NUM+1];
+int fail_led_matrix_arr [2][MAX_LED_MATRIX_NUM+1];
+int pass_led_matrix_arr [2][MAX_LED_MATRIX_NUM+1];
 
 // Function to initialize the LED matrix
 int led_init(void)
@@ -53,7 +55,61 @@ void led_on_seconds(int seconds)
     }
 }
 
-int result_led_matrix_arr [2][MAX_LED_MATRIX_NUM+1]= {
+void led_on_result(){
+    int num_arr_idx = 0;
+
+    for(int i = 0; i < MAX_LED_NUM; i+=16){
+        for(int j = i; j < (i+8); j++){
+            if(pass_led_matrix_arr[0][num_arr_idx] == 1){
+                // printk("[tens] led_on: j:[%d] num_array_idx[%d]\n", j, num_arr_idx);
+                led_on(led, j);
+            } else {
+                led_off(led, j);
+            }
+
+            num_arr_idx++;
+        }
+    }
+
+    num_arr_idx = 0;
+
+    for(int i = 0; i < MAX_LED_NUM; i+=16){
+        for(int j = (i+8); j < (i+16); j++){
+            if(pass_led_matrix_arr[1][num_arr_idx] == 1){
+                // printk("[units] led_on: j:[%d] num_array_idx[%d]\n", j, num_arr_idx);
+                led_on(led, j);
+            } else {
+                led_off(led, j);
+            }
+            num_arr_idx++;
+        }
+    }
+}
+
+int pass_led_matrix_arr [2][MAX_LED_MATRIX_NUM+1]= {
+    {//FA
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        1,1,1,0,0,1,1,0,
+        1,0,0,1,1,0,0,1,
+        1,1,1,0,1,1,1,1,
+        1,0,0,0,1,0,0,1,
+        1,0,0,0,1,0,0,1,
+        0,0,0,0,0,0,0,0
+    },
+    {//IL
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        1,1,1,1,1,1,1,1,
+        1,0,0,0,1,0,0,0,
+        1,1,1,1,1,1,1,1,
+        0,0,0,1,0,0,0,1,
+        1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0
+    }
+};
+
+int fail_led_matrix_arr [2][MAX_LED_MATRIX_NUM+1]= {
     {//FA
         0,0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,0,
@@ -67,11 +123,11 @@ int result_led_matrix_arr [2][MAX_LED_MATRIX_NUM+1]= {
     {//IL
         0,0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,0,
-        1,1,1,1,1,0,0,0,
-        0,0,1,0,1,0,0,0,
-        0,0,1,0,1,0,0,0,
-        0,0,1,0,1,0,0,0,
-        1,1,1,1,1,1,1,1,
+        1,1,1,0,1,0,0,0,
+        0,1,0,0,1,0,0,0,
+        0,1,0,0,1,0,0,0,
+        0,1,0,0,1,0,0,0,
+        1,1,1,0,1,1,1,1,
         0,0,0,0,0,0,0,0
     }
 };

@@ -17,3 +17,4 @@ static const struct device *const led = DEVICE_DT_GET(LED_NODE);
 
 int led_init(void);
 void led_on_seconds(int seconds);
+void led_on_result();
