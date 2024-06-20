@@ -20,6 +20,55 @@ int led_init(void)
     return DK_OK;
 }
 
+void led_on_mid(){
+    led_on(led, 49);
+    led_on(led, 50);
+    led_on(led, 51);
+    led_on(led, 65);
+    // led_on(led, 66);
+    led_on(led, 67);
+}
+void led_on_top(){
+    led_on(led, 1);
+    led_on(led, 2);
+    led_on(led, 3);
+    led_on(led, 17);
+    // led_on(led, 18);
+    led_on(led, 19);
+}
+void led_on_bot(){
+    led_on(led, 97);
+    led_on(led, 98);
+    led_on(led, 99);
+    led_on(led, 113);
+    // led_on(led, 114);
+    led_on(led, 115);
+}
+void led_off_mid(){
+    led_off(led, 48);
+    led_off(led, 49);
+    led_off(led, 50);
+    led_off(led, 64);
+    led_off(led, 65);
+    led_off(led, 66);
+}
+void led_off_top(){
+    led_off(led, 0);
+    led_off(led, 1);
+    led_off(led, 2);
+    led_off(led, 16);
+    led_off(led, 17);
+    led_off(led, 18);
+}
+void led_off_bot(){
+    led_off(led, 96);
+    led_off(led, 97);
+    led_off(led, 98);
+    led_off(led, 112);
+    led_off(led, 113);
+    led_off(led, 114);
+}
+
 void led_on_seconds(int num)
 {
     int tens = num / 10;
@@ -76,7 +125,7 @@ void led_blink_status(int type, uint32_t on_time, uint32_t off_time){
     led_blink(led, 0, 0, 0);
 }
 
-int show_map(int second){
+int show_map(int second, int pos){
     int start_col = second % (MAX_LED_MATRIX_COL * 6 + 1 - 16); // 시작 열 계산
     if(start_col == 0 && second != 0){return -1;} // 마지막 순간
     for (int row = 0; row < 8; row++) {
@@ -87,6 +136,30 @@ int show_map(int second){
             } else {
                 led_off(led, led_index); // 해당 LED를 끕니다.
             }
+        }
+    }
+    if(pos == MID){
+        led_on_mid();
+        led_off_top();
+        led_off_bot();
+        if(led_map[3][start_col+1]==1 || led_map[3][start_col+2]==1 || led_map[3][start_col+2]==1 || led_map[4][start_col+1]==1 || led_map[4][start_col+2]==1 || led_map[4][start_col+2]==1){
+            return -2;
+        }
+    }
+    else if(pos == TOP){
+        led_off_mid();
+        led_on_top();
+        led_off_bot();
+        if(led_map[0][start_col+1]==1 || led_map[0][start_col+2]==1 || led_map[0][start_col+2]==1 || led_map[1][start_col+1]==1 || led_map[1][start_col+2]==1 || led_map[1][start_col+2]==1){
+            return -2;
+        }
+    }
+    else{
+        led_off_mid();
+        led_off_top();
+        led_on_bot();
+        if(led_map[6][start_col+1]==1 || led_map[6][start_col+2]==1 || led_map[6][start_col+2]==1 || led_map[7][start_col+1]==1 || led_map[7][start_col+2]==1 || led_map[7][start_col+2]==1){
+            return -2;
         }
     }
     return 0;

@@ -13,7 +13,7 @@ int game_duration = 5; // the time for lasting game - current: 30s
 void my_work_handler(struct k_work *work)
 {
     if(seconds==0){
-        for(int i=4;i>=0;i--){
+        for(int i=3;i>0;i--){
             led_on_seconds(i);
             k_msleep(1000);
         }
@@ -26,6 +26,14 @@ void my_work_handler(struct k_work *work)
         seconds = 0;
         led_on_status(PASS);
         led_blink_status(PASS, BLINK_ON_TIME, BLINK_OFF_TIME);
+        k_timer_stop(&my_timer);
+        timer_stopped = true;
+        printk("Game Done\n");  
+    }
+    if(ret == -2){
+        seconds = 0;
+        led_on_status(FAIL);
+        led_blink_status(FAIL, BLINK_ON_TIME, BLINK_OFF_TIME);
         k_timer_stop(&my_timer);
         timer_stopped = true;
         printk("Game Done\n");  
