@@ -23,18 +23,18 @@ void my_work_handler(struct k_work *work)
     seconds++; 
     //if (seconds > game_duration * (1/timer_period)) { // 30초가 지나면 종료. 1/timer_period -> 0.2s에 한 번씩 seconds 증가하므로
     if(ret == -1){
+        k_timer_stop(&my_timer);
         seconds = 0;
         led_on_status(PASS);
         led_blink_status(PASS, BLINK_ON_TIME, BLINK_OFF_TIME);
-        k_timer_stop(&my_timer);
         timer_stopped = true;
         printk("Game Done\n");  
     }
     if(ret == -2){
+        k_timer_stop(&my_timer);
         seconds = 0;
         led_on_status(FAIL);
         led_blink_status(FAIL, BLINK_ON_TIME, BLINK_OFF_TIME);
-        k_timer_stop(&my_timer);
         timer_stopped = true;
         printk("Game Done\n");  
     }
