@@ -17,6 +17,8 @@
 
 K_THREAD_STACK_DEFINE(joystick_stack, STACK_SIZE);
 struct k_thread joystick_thread_data;
+static bool stop_thread = false;
+
 
 // 조이스틱 관련 전역 변수
 static const int ADC_MAX = 1023;
@@ -55,7 +57,7 @@ void read_adc(const struct adc_dt_spec *adc_channel, int32_t *value)
 
 void joystick_thread(void *arg1, void *arg2, void *arg3)
 {
-    while (1) {
+    while (!stop_thread) {
         //read_adc(&adc_channels[0], &nowX);
         read_adc(&adc_channels[1], &nowY);
 
@@ -70,12 +72,18 @@ void joystick_thread(void *arg1, void *arg2, void *arg3)
 }
 
 void start_joystick_thread(void)
-{
+{   
+    stop_thread = false;
     k_thread_create(&joystick_thread_data, joystick_stack,
                     K_THREAD_STACK_SIZEOF(joystick_stack),
                     joystick_thread,
                     NULL, NULL, NULL,
                     PRIORITY, 0, K_NO_WAIT);
+}
+
+void stop_joystick_thread(void){
+    stop_thread = true;
+    k_thread_join(&joystick_thread_data, K_FOREVER);
 }
 
 int joyCheckMove(void) // current checking for only y axis
@@ -105,8 +113,5 @@ int joystick_init(void)
             return -1;
         }
     }
-
-    start_joystick_thread();
-
     return 0;
 }

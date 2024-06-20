@@ -12,6 +12,7 @@ bool isChange(void);
 void read_adc(const struct adc_dt_spec *adc_channel, int32_t *value);
 void joystick_thread(void *arg1, void *arg2, void *arg3);
 void start_joystick_thread(void);
+void stop_joystick_thread(void);
 int joyCheckMove(void);
 int joystick_init(void);
 
