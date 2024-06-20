@@ -1,11 +1,11 @@
 #include "./include/timer.h"
 #include "./include/led.h"
-
+#include "./include/joy.h"
 struct k_timer my_timer;
 struct k_work my_work;
 
 int seconds = 0;
-int pos = MID;
+int pos = STAY;
 bool timer_stopped = true;
 double timer_period = 0.1;
 int game_duration = 5; // the time for lasting game - current: 30s
@@ -13,11 +13,13 @@ int game_duration = 5; // the time for lasting game - current: 30s
 void my_work_handler(struct k_work *work)
 {
     if(seconds==0){
-        for(int i=4;i>=0;i--){
+        for(int i=4;i>=1;i--){
             led_on_seconds(i);
             k_msleep(1000);
         }
     }
+
+    pos = joyCheckMove();
     int ret = show_map(seconds,pos);
 
     seconds++; 

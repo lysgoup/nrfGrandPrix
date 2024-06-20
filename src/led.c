@@ -76,7 +76,7 @@ void led_blink_status(int type, uint32_t on_time, uint32_t off_time){
     led_blink(led, 0, 0, 0);
 }
 
-int show_map(int second){
+int show_map(int second, int pos){
     int start_col = second % (MAX_LED_MATRIX_COL * 6 + 1 - 16); // 시작 열 계산
     if(start_col == 0 && second != 0){return -1;} // 마지막 순간
     for (int row = 0; row < 8; row++) {
