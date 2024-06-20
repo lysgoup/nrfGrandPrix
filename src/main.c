@@ -31,18 +31,18 @@ void main(void)
         .channel = PWM_CHANNEL,
         .flags = PWM_FLAGS,
     };
-    // const struct pwm_dt_spec sBuzzer = PWM_DT_SPEC_GET(DT_ALIAS(buzzer_pwm));
+    // const struct pwm_dt_spec sBuzzer = PWM_DT_SPEC_GET(DT_ALIAS(pwm_led0));
 
     while (1) {
         printk("check\n");
         // Set PWM to 1kHz with 50% duty cycle
-        ret = pwm_set_dt(&pwm_spec, PWM_MSEC(600)/16, PWM_HZ(440));
+        ret = pwm_set_dt(&pwm_spec, (uint32_t)(1/(float)932*1000000000), 150000);
         if (ret < 0) {
             printk("Error %d: failed to set pulse width\n", ret);
             return;
         }
 
-        k_sleep(K_MSEC(1000));
+        // k_sleep(K_MSEC(1000));
 
         // Turn off the buzzer
         // ret = pwm_set_dt(&sBuzzer, PWM_HZ(1000), 0);
