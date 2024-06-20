@@ -7,7 +7,7 @@ int led_map [MAX_LED_MATRIX_ROW][MAX_LED_MATRIX_COL*6];
 
 int carPose = MID;
 int last_start_col;
-int last_count;
+int car_offset;
 
 // Function to initialize the LED matrix
 int led_init(void)
@@ -32,8 +32,8 @@ void led_mid(int on, int offset){
     for(int i = 49; i < 68 ; i+=16){
         for(int j = i ; j < i+3 ; j++){
             if(j==66) continue;
-            if(on) led_on(led, j);
-            else led_off(led, j);
+            if(on) led_on(led, j+offset);
+            else led_off(led, j+offset);
         }
     }
 }
@@ -42,8 +42,8 @@ void led_top(int on, int offset){
     for(int i = 1; i < 19 ; i+=16){
         for(int j = i ; j < i+3 ; j++){
             if(j==18) continue;
-            if(on) led_on(led, j);
-            else led_off(led, j);
+            if(on) led_on(led, j+offset);
+            else led_off(led, j+offset);
         }
     }
 }
@@ -52,8 +52,8 @@ void led_bot(int on, int offset){
     for(int i = 97; i < 115 ; i+=16){
         for(int j = i ; j < i+3 ; j++){
             if(j==114) continue;
-            if(on) led_on(led, j);
-            else led_off(led, j);
+            if(on) led_on(led, j+offset);
+            else led_off(led, j+offset);
         }
     }
 }
@@ -154,13 +154,16 @@ int show_map(int second, int move){
     if(second == 0){
         carPose = MID; // Pose Init
         last_start_col = 0;
-        last_count = 0;
+        car_offset = 0;
+        printk("offset: %d\n",car_offset);
     }
 
     // MAP
     int start_col;
     if(last_start_col != 0){
         start_col = last_start_col;
+        car_offset++;
+        printk("offset: %d\n",car_offset);
     }
     else{
         start_col = second % (MAX_LED_MATRIX_COL * MAP_LENGTH + 1 - MAX_LED_MATRIX_COL); // 시작 열 계산
@@ -180,6 +183,8 @@ int show_map(int second, int move){
         }
     }
 
+    if(car_offset == 9) return 1;
+
     // CAR
 
     // Car Movement Check
@@ -197,17 +202,16 @@ int show_map(int second, int move){
     }
 
     // Car Draw
-
     if(carPose == MID){
-        led_on_mid(last_count);
+        led_on_mid(car_offset);
         return check_collision(3, start_col+1);
     }
     else if(carPose == TOP){
-        led_on_top(last_count);
+        led_on_top(car_offset);
         return check_collision(0, start_col+1);
     }
     else{
-        led_on_bot(last_count);
+        led_on_bot(car_offset);
         return check_collision(6, start_col+1);
     }
 
