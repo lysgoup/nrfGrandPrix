@@ -22,14 +22,12 @@ void my_work_handler(struct k_work *work)
         }
         start_joystick_thread();
     }
-
     
     if(seconds==1){
         buzzer_on(1319,300);
         buzzer_off(0);
     }
     
-   
     move = joyCheckMove();
     int ret = show_map(seconds, move);
 

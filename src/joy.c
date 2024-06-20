@@ -23,7 +23,7 @@ static bool stop_thread = false;
 // 조이스틱 관련 전역 변수
 static const int ADC_MAX = 1023;
 static const int MIDDLE = ADC_MAX / 2;
-int32_t nowX = 0, nowY = 0;
+int32_t nowX = MIDDLE, nowY = MIDDLE; // Initial Position
 
 #if !DT_NODE_EXISTS(DT_PATH(zephyr_user)) || \
     !DT_NODE_HAS_PROP(DT_PATH(zephyr_user), io_channels)

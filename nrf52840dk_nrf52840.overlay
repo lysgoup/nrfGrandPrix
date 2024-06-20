@@ -89,6 +89,34 @@
 	led-pre = < 500 >;
 };
 
+// For battery display
+
+/ {
+	aliases{
+		gpio-clk = &gpioclk;
+		gpio-dio = &gpiodio;
+	};
+
+	gpiocustom{
+		status = "okay";
+		compatible = "gpio-keys";
+
+		gpioclk: gpioclk{
+			gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
+			label = "gpioclk P1.12";
+		};
+
+		gpiodio: gpiodio{
+			gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>;
+			label = "gpiodio P1.13";
+		};
+	};
+};
+
+&spi3 {
+	status = "disabled";
+};
+
 // For LED Matrix
 
 

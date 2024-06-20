@@ -147,7 +147,9 @@ int check_collision(int carX, int carY) { // top-left point of the car
 
 int show_map(int second, int move){
 
-    if(second == 0) carPose = MID; // Pose Init222
+    printk("carPose: %d\n", carPose);
+
+    if(second == 0) carPose = MID; // Pose Init
 
     // MAP
 
@@ -175,6 +177,7 @@ int show_map(int second, int move){
         }
     }
     else if(move == DOWN){
+        printk("moveDown!\n");
         if(carPose != BOT){ // 이미 BOT에 있는 경우는 제외
             carPose++;
         }

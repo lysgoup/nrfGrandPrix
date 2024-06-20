@@ -53,7 +53,7 @@ static void rotary_thread(void *arg1, void *arg2, void *arg3)
 
         led_set_brightness(led, 0, brightness);
 
-        printk("Brightness = %d\n", brightness);
+        // printk("Brightness = %d\n", brightness);
         k_msleep(100);
     }
     printk("Rotary thread stopped.\n");

@@ -10,12 +10,9 @@
 #include "./include/joy.h"
 #include "./include/buzzer.h"
 #include "./include/rotary.h"
+#include "./include/batteryDisplay.h"
 
-
-int main(void)
-{
-        init_buzzer();
-        printk("Program Start");
+int configuration(){
 
         int ret = DK_OK;
 
@@ -39,12 +36,37 @@ int main(void)
                 return DK_ERR;
         }
 
+        // buzzer 초기화
+        init_buzzer();
+
         // 로터리 인코더 초기화
         ret = rotary_init(); // rotary thread 시작
         if (ret != 0) {
                 printk("Error initializing Rotary\n");
-                return;
+                return DK_ERR;
         } 
+        
+        // 배터리 디스플레이 초기화
+        ret = batterydisplay_intit();
+        if(ret != DK_OK){
+                printk("Error initializing battery display\n");
+                return DK_ERR;
+        }
+
+        return DK_OK;
+}
+
+int main(void)
+{
+        
+        printk("Program Start");
+
+        int ret = configuration();
+        if(ret == DK_ERR){
+                printk("Configuration Error");
+                return DK_ERR;
+        }
+
         led_on_status(WAIT);
 
         while(1) {
