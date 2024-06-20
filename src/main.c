@@ -50,7 +50,7 @@ int configuration(){
         } 
         
         // 배터리 디스플레이 초기화
-        ret = batterydisplay_intit();
+        ret = batterydisplay_init();
         if(ret != DK_OK){
                 printk("Error initializing battery display\n");
                 return DK_ERR;
