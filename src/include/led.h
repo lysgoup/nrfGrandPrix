@@ -3,6 +3,8 @@
 #include <zephyr/devicetree.h>
 #include <zephyr/kernel.h>
 
+#define INIT_BRIGHTNESS 30
+
 #define MAX_LED_MATRIX_IDX 10
 #define MAX_LED_NUM 128
 #define MAX_LED_MATRIX_NUM 64

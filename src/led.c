@@ -19,6 +19,8 @@ int led_init(void)
         led_off(led, i);
     }
 
+    led_set_brightness(led, 0, INIT_BRIGHTNESS);
+
     return DK_OK;
 }
 
