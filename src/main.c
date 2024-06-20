@@ -40,7 +40,7 @@ int main(void)
         }
 
         // 로터리 인코더 초기화
-        ret = rotary_init();
+        ret = rotary_init(); // rotary thread 시작
         if (ret != 0) {
                 printk("Error initializing Rotary\n");
                 return;

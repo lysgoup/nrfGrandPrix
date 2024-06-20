@@ -20,7 +20,6 @@ void my_work_handler(struct k_work *work)
             buzzer_on(659,500);
             buzzer_off(500);
         }
-        
         start_joystick_thread();
     }
 

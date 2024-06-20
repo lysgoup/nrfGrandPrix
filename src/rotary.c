@@ -6,6 +6,20 @@ struct k_thread rotary_thread_data;
 static bool stop_thread = false;
 static int brightness = INIT_BRIGHTNESS;
 
+#define SW_NODE DT_NODELABEL(gpiosw)
+#if !DT_NODE_HAS_STATUS(SW_NODE, okay)
+#error "Unsupported board: gpiosw devicetree alias is not defined or enabled"
+#endif
+static const struct gpio_dt_spec sw = GPIO_DT_SPEC_GET(SW_NODE, gpios);
+static struct gpio_callback sw_cb_data;
+
+void sw_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+{
+    printk("brightness init\n");
+    brightness = INIT_BRIGHTNESS;
+    led_set_brightness(led, 0, brightness);
+}
+
 static void rotary_thread(void *arg1, void *arg2, void *arg3)
 {
     const struct device *const dev = DEVICE_DT_GET(DT_ALIAS(qdec0));
@@ -68,6 +82,26 @@ int rotary_init(void)
         printk("Qdec device is not ready\n");
         return -1;
     }
+
+    if (!gpio_is_ready_dt(&sw)) {
+        printk("SW GPIO is not ready\n");
+        return -1;
+    }
+
+    int err = gpio_pin_configure_dt(&sw, GPIO_INPUT);
+    if (err < 0) {
+        printk("Error configuring SW GPIO pin %d\n", err);
+        return -1;
+    }
+
+    err = gpio_pin_interrupt_configure_dt(&sw, GPIO_INT_EDGE_RISING);
+    if (err != 0) {
+        printk("Error configuring SW GPIO interrupt %d\n", err);
+        return -1;
+    }
+
+    gpio_init_callback(&sw_cb_data, sw_callback, BIT(sw.pin));
+    gpio_add_callback(sw.port, &sw_cb_data);
 
     start_rotary_thread();
     return 0;
