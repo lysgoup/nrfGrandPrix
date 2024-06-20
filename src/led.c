@@ -1,11 +1,13 @@
 #include "./include/led.h"
 #include "./include/value.h"
-
+#include "./include/batteryDisplay.h"
 int number_led_matrix_arr [MAX_LED_MATRIX_IDX+1][MAX_LED_MATRIX_NUM+1];
 int led_matrix_arr [3][MAX_LED_NUM+1];
 int led_map [MAX_LED_MATRIX_ROW][MAX_LED_MATRIX_COL*6];
 
 int carPose = MID;
+int last_start_col;
+int last_count;
 
 // Function to initialize the LED matrix
 int led_init(void)
@@ -26,7 +28,7 @@ int led_init(void)
 
 // LEDs of Car
 
-void led_mid(int on){
+void led_mid(int on, int offset){
     for(int i = 49; i < 68 ; i+=16){
         for(int j = i ; j < i+3 ; j++){
             if(j==66) continue;
@@ -36,7 +38,7 @@ void led_mid(int on){
     }
 }
 
-void led_top(int on){
+void led_top(int on, int offset){
     for(int i = 1; i < 19 ; i+=16){
         for(int j = i ; j < i+3 ; j++){
             if(j==18) continue;
@@ -46,7 +48,7 @@ void led_top(int on){
     }
 }
 
-void led_bot(int on){
+void led_bot(int on, int offset){
     for(int i = 97; i < 115 ; i+=16){
         for(int j = i ; j < i+3 ; j++){
             if(j==114) continue;
@@ -56,22 +58,22 @@ void led_bot(int on){
     }
 }
 
-void led_on_top(){
-    led_top(ON);
-    led_mid(OFF);
-    led_bot(OFF);
+void led_on_top(int offset){
+    led_top(ON,offset);
+    led_mid(OFF,offset);
+    led_bot(OFF,offset);
 }
 
-void led_on_mid(){
-    led_top(OFF);
-    led_mid(ON);
-    led_bot(OFF);
+void led_on_mid(int offset){
+    led_top(OFF,offset);
+    led_mid(ON,offset);
+    led_bot(OFF,offset);
 }
 
-void led_on_bot(){
-    led_top(OFF);
-    led_mid(OFF);
-    led_bot(ON);
+void led_on_bot(int offset){
+    led_top(OFF,offset);
+    led_mid(OFF,offset);
+    led_bot(ON,offset);
 }
 
 
@@ -149,12 +151,23 @@ int show_map(int second, int move){
 
     printk("carPose: %d\n", carPose);
 
-    if(second == 0) carPose = MID; // Pose Init
+    if(second == 0){
+        carPose = MID; // Pose Init
+        last_start_col = 0;
+        last_count = 0;
+    }
 
     // MAP
-
-    int start_col = second % (MAX_LED_MATRIX_COL * MAP_LENGTH + 1 - MAX_LED_MATRIX_COL); // 시작 열 계산
-    if(start_col == 0 && second != 0){return 1;} // 마지막 순간
+    int start_col;
+    if(last_start_col != 0){
+        start_col = last_start_col;
+    }
+    else{
+        start_col = second % (MAX_LED_MATRIX_COL * MAP_LENGTH + 1 - MAX_LED_MATRIX_COL); // 시작 열 계산
+        if((start_col+1)%(MAX_LED_MATRIX_COL * MAP_LENGTH + 1 - MAX_LED_MATRIX_COL)  == 0){
+            last_start_col = start_col;
+        }
+    }
 
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 16; col++) {
@@ -186,15 +199,15 @@ int show_map(int second, int move){
     // Car Draw
 
     if(carPose == MID){
-        led_on_mid();
+        led_on_mid(last_count);
         return check_collision(3, start_col+1);
     }
     else if(carPose == TOP){
-        led_on_top();
+        led_on_top(last_count);
         return check_collision(0, start_col+1);
     }
     else{
-        led_on_bot();
+        led_on_bot(last_count);
         return check_collision(6, start_col+1);
     }
 

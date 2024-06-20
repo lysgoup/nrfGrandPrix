@@ -15,7 +15,7 @@
 static const struct device *pwm = DEVICE_DT_GET(PWM_CTLR);
 static const struct pwm_dt_spec pwm_spec =  PWM_DT_SPEC_GET(BUZZER_NODE);
 
-void init_buzzer();
+int buzzer_init();
 void buzzer_on(uint32_t hz, uint32_t time);
 void buzzer_off(uint32_t time);
 #endif

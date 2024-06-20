@@ -4,14 +4,15 @@
 
 #include "./include/buzzer.h"
 
-void init_buzzer()
+int buzzer_init()
 {
     printk("PWM-based buzzer control\n");
 
     if (!device_is_ready(pwm)) {
         printk("Error: PWM device %s is not ready\n", pwm->name);
-        return;
+        return -1;
     }
+    return 0;
 }
 
 void buzzer_on(uint32_t hz, uint32_t time){

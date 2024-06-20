@@ -65,7 +65,7 @@ void joystick_thread(void *arg1, void *arg2, void *arg3)
         else if(nowY > 65500) nowY = 0;
 
         //printk("Joy X: %" PRIu32 ", ", nowX);
-        printk("Joy Y: %" PRIu32 "\n", nowY);
+        // printk("Joy Y: %" PRIu32 "\n", nowY);
 
         k_sleep(K_MSEC(100)); // 주기적으로 조이스틱 값을 읽어들임
     }

@@ -36,8 +36,11 @@ int configuration(){
                 return DK_ERR;
         }
 
-        // buzzer 초기화
-        init_buzzer();
+        ret = buzzer_init();
+        if (ret != DK_OK) {
+                printk("Error initializing Buzzer\n");
+                return DK_ERR;
+        }
 
         // 로터리 인코더 초기화
         ret = rotary_init(); // rotary thread 시작
@@ -67,7 +70,7 @@ int main(void)
                 return DK_ERR;
         }
 
-        led_on_status(WAIT);
+        // led_on_status(WAIT);
 
         while(1) {
                 if(timer_stopped){

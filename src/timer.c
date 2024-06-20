@@ -14,11 +14,11 @@ int game_duration = 5; // the time for lasting game - current: 30s
 void my_work_handler(struct k_work *work)
 {
     if(seconds==0){
-        
         for(int i=3;i>0;i--){
             led_on_seconds(i);
             buzzer_on(659,500);
             buzzer_off(500);
+            // k_sleep(K_MSEC(1000));
         }
         start_joystick_thread();
     }

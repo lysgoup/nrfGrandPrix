@@ -1,22 +1,21 @@
 #include "./include/batteryDisplay.h"
 #include "./include/value.h"
 
-static int8_t leveltab[9] = {0x00,0x40,0x60,0x70,0x78,0x7c,0x7e,0x7f};//Level 0~7
+static int8_t leveltab[10] = {0x00, 0x20, 0x40, 0x50, 0x60, 0x70, 0x78, 0x7c, 0x7e, 0x7f}; // Level 0~9
 static uint8_t cmd_dispctrl = DISPLAY_BRIGHTEST + BRIGHTNESS_LEVEL1;
 static int setlevel = 0;
 
-// Function to initialize the battery display
-int batterydisplay_intit(void)
+int batterydisplay_init(void)
 {
     if (!gpio_is_ready_dt(&clk)) {
-		printk("clk GPIO is not ready\n");
-		return DK_ERR;
-	}
+        printk("clk GPIO is not ready\n");
+        return DK_ERR;
+    }
 
-	if(!gpio_is_ready_dt(&dio)) {
-		printk("dio GPIO is not ready\n");
-		return DK_ERR;
-	}
+    if (!gpio_is_ready_dt(&dio)) {
+        printk("dio GPIO is not ready\n");
+        return DK_ERR;
+    }
 
     printk("batterydisplay_init success\n");
 
@@ -37,11 +36,11 @@ void write_byte(int8_t wr_data)
 {
     uint8_t data = wr_data;
 
-    for(uint8_t i = 0; i < 8; i++){
+    for (uint8_t i = 0; i < 8; i++) {
         gpio_pin_configure_dt(&clk, GPIO_OUTPUT);
         bit_delay();
 
-        if(data & 0x01)
+        if (data & 0x01)
             gpio_pin_configure_dt(&dio, GPIO_INPUT);
         else
             gpio_pin_configure_dt(&dio, GPIO_OUTPUT);
@@ -61,7 +60,7 @@ void write_byte(int8_t wr_data)
     gpio_pin_configure_dt(&clk, GPIO_INPUT);
     bit_delay();
     uint8_t ack = gpio_pin_get_dt(&dio);
-    if(ack == 0){
+    if (ack == 0) {
         gpio_pin_configure_dt(&dio, GPIO_OUTPUT);
     }
 
@@ -90,13 +89,12 @@ void stop(void)
 
 int display_level(uint8_t level)
 {
-    if(level > 7){
+    if (level > 9) {
         printk("Invalid level\n");
         return DK_ERR;
     }
 
-    if( setlevel == level){
-        // printk("Same level\n");
+    if (setlevel == level) {
         return DK_OK;
     }
 
@@ -121,10 +119,10 @@ int display_level(uint8_t level)
     return DK_OK;
 }
 
-void display_frame(bool framgeflag)
+void display_frame(bool frameflag)
 {
     int8_t segdata;
-    if(framgeflag == FRAME_ON)
+    if (frameflag == FRAME_ON)
         segdata = 0x40;
     else
         segdata = 0x00;
@@ -135,7 +133,7 @@ void display_frame(bool framgeflag)
 
     start();
     write_byte(ADDR_CMD_01H);
-    for(uint8_t i = 0; i < 3; i++){
+    for (uint8_t i = 0; i < 3; i++) {
         write_byte(segdata);
     }
     stop();
