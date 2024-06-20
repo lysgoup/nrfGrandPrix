@@ -15,6 +15,16 @@
     zephyr,user {
         io-channels = <&adc 1>, <&adc 2>;
     };
+
+    pwmbuzzer {
+        compatible = "pwm-leds";
+        status = "okay";
+
+        buzzer: buzzer_pwm {
+            pwms = <&pwm0 0 PWM_MSEC(880) PWM_POLARITY_NORMAL>;
+            label = "PWM_1";
+        };
+    };
 };
 
 &adc {

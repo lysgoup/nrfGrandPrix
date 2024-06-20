@@ -8,10 +8,11 @@
 #include "./include/gpios.h"
 #include "./include/timer.h"
 #include "./include/joy.h"
+#include "./include/buzzer.h"
 
 int main(void)
 {
-        
+        init_buzzer();
         printk("Program Start");
 
         int ret = DK_OK;

@@ -1,6 +1,7 @@
 #include "./include/timer.h"
 #include "./include/led.h"
 #include "./include/joy.h"
+#include "./include/buzzer.h"
 struct k_timer my_timer;
 struct k_work my_work;
 
@@ -15,8 +16,14 @@ void my_work_handler(struct k_work *work)
     if(seconds==0){
         for(int i=3;i>0;i--){
             led_on_seconds(i);
-            k_msleep(1000);
+            buzzer_on(659,500);
+            buzzer_off(500);
         }
+    }
+
+    if(seconds==1){
+        buzzer_on(1319,300);
+        buzzer_off(0);
     }
 
     move = joyCheckMove();

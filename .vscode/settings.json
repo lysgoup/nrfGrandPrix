@@ -2,5 +2,8 @@
   "nrf-connect.applications": [
     "${workspaceFolder}"
   ],
-  "C_Cpp.errorSquiggles": "disabled"
+  "C_Cpp.errorSquiggles": "disabled",
+  "files.associations": {
+    "printk.h": "c"
+  }
 }
