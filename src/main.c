@@ -9,6 +9,8 @@
 #include "./include/timer.h"
 #include "./include/joy.h"
 #include "./include/buzzer.h"
+#include "./include/rotary.h"
+
 
 int main(void)
 {
@@ -37,6 +39,12 @@ int main(void)
                 return DK_ERR;
         }
 
+        // 로터리 인코더 초기화
+        ret = rotary_init();
+        if (ret != 0) {
+                printk("Error initializing Rotary\n");
+                return;
+        } 
         led_on_status(WAIT);
 
         while(1) {

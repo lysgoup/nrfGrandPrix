@@ -74,6 +74,7 @@ void led_on_bot(){
     led_bot(ON);
 }
 
+
 // LED TEXT DISPLAY
 
 void led_on_seconds(int num)
@@ -140,6 +141,7 @@ int check_collision(int carX, int carY) { // top-left point of the car
     }
     return 0;
 }
+
 
 // FOR GAME
 

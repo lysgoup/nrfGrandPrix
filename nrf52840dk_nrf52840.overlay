@@ -11,6 +11,8 @@
 // For more help, browse the DeviceTree documentation at https://docs.zephyrproject.org/latest/guides/dts/index.html
 // You can also visit the nRF DeviceTree extension documentation at https://nrfconnect.github.io/vscode-nrf-connect/devicetree/nrfdevicetree.html
 
+// For JoyStick
+
 / {
     zephyr,user {
         io-channels = <&adc 1>, <&adc 2>;
@@ -51,6 +53,43 @@
         // zephyr,differential;
     };
 };
+
+// For Rotary Encoder
+
+/ {
+	aliases {
+		qdec0 = &qdec0;
+		gpio-sw = &gpiosw;
+	};
+
+	gpiocustom{
+		status = "okay";
+		compatible = "gpio-keys";
+		gpiosw: gpiosw {
+			gpios = <&gpio1 5 (GPIO_PULL_UP)>;
+			label = "gpiosw P1.05";
+		};
+	};
+};
+
+&pinctrl {
+	qdec_pinctrl: qdec_pinctrl {
+		group1 {
+			psels = <NRF_PSEL(QDEC_A, 1, 4)>,   /* Arduino D3 */
+				<NRF_PSEL(QDEC_B, 1, 3)>;   /* Arduino D2 */
+		};
+	};
+};
+
+&qdec0 {
+	status = "okay";
+	pinctrl-0 = <&qdec_pinctrl>;
+	pinctrl-names = "default";
+	steps = < 20 >;
+	led-pre = < 500 >;
+};
+
+// For LED Matrix
 
 
 &i2c0 {
