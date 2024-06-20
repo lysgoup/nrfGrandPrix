@@ -37,19 +37,6 @@ const struct adc_dt_spec adc_channels[] = {
                          DT_SPEC_AND_COMMA)
 };
 
-bool isChange(void)
-{
-    if ((nowX < (preX - 50)) || nowX > (preX + 50)) {
-        preX = nowX;
-        return true;
-    }
-    if ((nowY < (preY - 50)) || nowY > (preY + 50)) {
-        preY = nowY;
-        return true;
-    }
-    return false;
-}
-
 void read_adc(const struct adc_dt_spec *adc_channel, int32_t *value)
 {
     uint16_t buf;
@@ -72,7 +59,7 @@ void joystick_thread(void *arg1, void *arg2, void *arg3)
         //read_adc(&adc_channels[0], &nowX);
         read_adc(&adc_channels[1], &nowY);
 
-        if(nowY == ADC_MAX) nowY = AXIS_DEVIATION;
+        if(nowY == ADC_MAX) nowY = MIDDLE;
         else if(nowY > 65500) nowY = 0;
 
         //printk("Joy X: %" PRIu32 ", ", nowX);

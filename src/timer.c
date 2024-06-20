@@ -5,7 +5,7 @@ struct k_timer my_timer;
 struct k_work my_work;
 
 int seconds = 0;
-int pos = STAY;
+int move = STAY;
 bool timer_stopped = true;
 double timer_period = 0.1;
 int game_duration = 5; // the time for lasting game - current: 30s
@@ -13,22 +13,30 @@ int game_duration = 5; // the time for lasting game - current: 30s
 void my_work_handler(struct k_work *work)
 {
     if(seconds==0){
-        for(int i=4;i>=1;i--){
+        for(int i=3;i>0;i--){
             led_on_seconds(i);
             k_msleep(1000);
         }
     }
 
-    pos = joyCheckMove();
-    int ret = show_map(seconds,pos);
+    move = joyCheckMove();
+    int ret = show_map(seconds, move);
 
     seconds++; 
     //if (seconds > game_duration * (1/timer_period)) { // 30초가 지나면 종료. 1/timer_period -> 0.2s에 한 번씩 seconds 증가하므로
-    if(ret == -1){
+    if(ret == 1){
+        k_timer_stop(&my_timer);
         seconds = 0;
         led_on_status(PASS);
         led_blink_status(PASS, BLINK_ON_TIME, BLINK_OFF_TIME);
+        timer_stopped = true;
+        printk("Game Done\n");  
+    }
+    if(ret == -1){
         k_timer_stop(&my_timer);
+        seconds = 0;
+        led_on_status(FAIL);
+        led_blink_status(FAIL, BLINK_ON_TIME, BLINK_OFF_TIME);
         timer_stopped = true;
         printk("Game Done\n");  
     }

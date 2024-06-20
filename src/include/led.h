@@ -6,8 +6,10 @@
 #define MAX_LED_MATRIX_IDX 10
 #define MAX_LED_NUM 128
 #define MAX_LED_MATRIX_NUM 64
+
 #define MAX_LED_MATRIX_COL 16
 #define MAX_LED_MATRIX_ROW 8
+#define MAP_LENGTH 6
 
 #define TENS_START_INDEX 0
 #define UNITS_START_INDEX 8
@@ -26,6 +28,9 @@
 #define UP 0
 #define STAY 1
 #define DOWN 2
+
+#define ON 1
+#define OFF 0
 
 #define BLINK_ON_TIME 500
 #define BLINK_OFF_TIME 500
