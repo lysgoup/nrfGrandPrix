@@ -33,19 +33,16 @@ void button1_callback(const struct device *dev, struct gpio_callback *cb, uint32
     if(busy==1){
         return;
     }
-    int ret;
-
     serial_write();
 }
 
 void button2_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
     printk("Button 2 pressed\n");
-    int ret;
-    ret = gpio_pin_toggle_dt(&led2);
-    if (ret < 0) {
-            return;
+    if(busy==1){
+        return;
     }
+    
 }
 
 void button3_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
