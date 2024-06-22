@@ -38,7 +38,7 @@ static const struct gpio_dt_spec dio = GPIO_DT_SPEC_GET(DIO_NODE, gpios);
 #define BRIGHTNESS_LEVEL7 7
 
 
-int batterydisplay_intit(void);
+int batterydisplay_init(void);
 void set_brightness(int brightness);
 void set_level(int level);
 void write_byte(int8_t wr_data);

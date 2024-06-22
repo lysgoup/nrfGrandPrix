@@ -10,6 +10,8 @@ static struct gpio_callback button1_cb_data;
 static struct gpio_callback button2_cb_data;
 static struct gpio_callback button3_cb_data;
 
+extern int busy;
+
 void button0_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
     printk("Button 0 pressed\n");
@@ -18,17 +20,19 @@ void button0_callback(const struct device *dev, struct gpio_callback *cb, uint32
         seconds = 0;  // 타이머 초기화
         k_timer_start(&my_timer, K_SECONDS(timer_period), K_SECONDS(timer_period));  // 타이머 시작
         printk("Timer started\n");
+        busy = 1;
     }
 }
 
 void button1_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
     printk("Button 1 pressed\n");
-    int ret;
-    ret = gpio_pin_toggle_dt(&led1);
-    if (ret < 0) {
-            return;
+    if(busy==1){
+        return;
     }
+    int ret;
+
+    serial_write();
 }
 
 void button2_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)

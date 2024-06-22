@@ -4,6 +4,8 @@
   ],
   "C_Cpp.errorSquiggles": "disabled",
   "files.associations": {
-    "printk.h": "c"
+    "printk.h": "c",
+    "string.h": "c",
+    "kernel.h": "c"
   }
 }

@@ -10,6 +10,7 @@ int move = STAY;
 bool timer_stopped = true;
 double timer_period = 0.1;
 int game_duration = 5; // the time for lasting game - current: 30s
+extern int busy;
 
 void my_work_handler(struct k_work *work)
 {
@@ -39,6 +40,7 @@ void my_work_handler(struct k_work *work)
         led_on_status(PASS);
         led_blink_status(PASS, BLINK_ON_TIME, BLINK_OFF_TIME);
         timer_stopped = true;
+        busy = 0;
         stop_joystick_thread();
         printk("Game Done\n");  
     }
@@ -48,6 +50,7 @@ void my_work_handler(struct k_work *work)
         led_on_status(FAIL);
         led_blink_status(FAIL, BLINK_ON_TIME, BLINK_OFF_TIME);
         timer_stopped = true;
+        busy = 0;
         stop_joystick_thread();
         printk("Game Done\n");  
     }

@@ -11,10 +11,14 @@
 #include "./include/buzzer.h"
 #include "./include/rotary.h"
 #include "./include/batteryDisplay.h"
+#include "./include/co2.h"
+
+int busy;
 
 int configuration(){
 
         int ret = DK_OK;
+        busy = 0;
 
         // LED and buttons configuration (NRF52840's)
         ret = gpio_init();
@@ -56,6 +60,13 @@ int configuration(){
                 return DK_ERR;
         }
 
+        // INIT CO2
+        ret = co2_init();
+        if(ret != DK_OK){
+                printk("Error initializing CO2\n");
+                return DK_ERR;
+        }
+
         return DK_OK;
 }
 
@@ -69,8 +80,6 @@ int main(void)
                 printk("Configuration Error");
                 return DK_ERR;
         }
-
-        // led_on_status(WAIT);
 
         while(1) {
                 if(timer_stopped){
