@@ -2,6 +2,9 @@
 #include "./include/led.h"
 #include "./include/joy.h"
 #include "./include/buzzer.h"
+#include "./include/batteryDisplay.h"
+#include <math.h>
+
 struct k_timer my_timer;
 struct k_work my_work;
 
@@ -9,7 +12,22 @@ int seconds = 0;
 int move = STAY;
 bool timer_stopped = true;
 double timer_period = 0.1;
-int game_duration = 5; // the time for lasting game - current: 30s
+
+
+void isEnd(int status){
+
+    if(status==0) return;
+
+    k_timer_stop(&my_timer);
+    seconds = 0;
+    led_on_status(status);
+    led_blink_status(status, BLINK_ON_TIME, BLINK_OFF_TIME);
+    timer_stopped = true;
+    stop_joystick_thread();
+    display_clear();
+    printk("Game Done\n");  
+
+}
 
 void my_work_handler(struct k_work *work)
 {
@@ -31,26 +49,14 @@ void my_work_handler(struct k_work *work)
     move = joyCheckMove();
     int ret = show_map(seconds, move);
 
+    int interval = round(getMapLength() / 7); // 7 = batteryDisplay levels
+
+    if(seconds==0) display_level(0);
+    else display_level((seconds/interval)+1); // 1 ~ intveral-1 -> level 1, interval ~ inverval*2 - 1 -> level 2
+
+    isEnd(ret);
+
     seconds++; 
-    //if (seconds > game_duration * (1/timer_period)) { // 30초가 지나면 종료. 1/timer_period -> 0.2s에 한 번씩 seconds 증가하므로
-    if(ret == 1){
-        k_timer_stop(&my_timer);
-        seconds = 0;
-        led_on_status(PASS);
-        led_blink_status(PASS, BLINK_ON_TIME, BLINK_OFF_TIME);
-        timer_stopped = true;
-        stop_joystick_thread();
-        printk("Game Done\n");  
-    }
-    if(ret == -1){
-        k_timer_stop(&my_timer);
-        seconds = 0;
-        led_on_status(FAIL);
-        led_blink_status(FAIL, BLINK_ON_TIME, BLINK_OFF_TIME);
-        timer_stopped = true;
-        stop_joystick_thread();
-        printk("Game Done\n");  
-    }
 }
 
 K_WORK_DEFINE(my_work, my_work_handler);

@@ -62,16 +62,13 @@ int configuration(){
 int main(void)
 {
         
-        printk("Program Start");
+        printk("Program Start\n");
 
         int ret = configuration();
         if(ret == DK_ERR){
                 printk("Configuration Error");
                 return DK_ERR;
         }
-
-        // led_on_status(WAIT);
-
         while(1) {
                 if(timer_stopped){
                         led_on_status(WAIT);

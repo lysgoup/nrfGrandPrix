@@ -3,7 +3,7 @@
 #include "./include/gpios.h"
 #include "./include/timer.h"
 #include "./include/led.h"
-
+#include "./include/batteryDisplay.h"
 
 static struct gpio_callback button0_cb_data; // Game 진입
 static struct gpio_callback button1_cb_data;
@@ -15,7 +15,8 @@ void button0_callback(const struct device *dev, struct gpio_callback *cb, uint32
     printk("Button 0 pressed\n");
     if (timer_stopped) {
         timer_stopped = false;  // 타이머가 시작됨을 표시
-        seconds = 0;  // 타이머 초기화
+        seconds = 0;  // 타이머 초기화 
+        //display_level(4);
         k_timer_start(&my_timer, K_SECONDS(timer_period), K_SECONDS(timer_period));  // 타이머 시작
         printk("Timer started\n");
     }

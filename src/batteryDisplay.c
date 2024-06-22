@@ -1,7 +1,7 @@
 #include "./include/batteryDisplay.h"
 #include "./include/value.h"
 
-static int8_t leveltab[10] = {0x00, 0x20, 0x40, 0x50, 0x60, 0x70, 0x78, 0x7c, 0x7e, 0x7f}; // Level 0~9
+static int8_t leveltab[9] = {0x00,0x40,0x60,0x70,0x78,0x7c,0x7e,0x7f};//Level 0~7
 static uint8_t cmd_dispctrl = DISPLAY_BRIGHTEST + BRIGHTNESS_LEVEL1;
 static int setlevel = 0;
 
@@ -17,6 +17,7 @@ int batterydisplay_init(void)
         return DK_ERR;
     }
 
+    display_clear();
     printk("batterydisplay_init success\n");
 
     return DK_OK;
@@ -89,12 +90,13 @@ void stop(void)
 
 int display_level(uint8_t level)
 {
-    if (level > 9) {
+    if(level > 7){
         printk("Invalid level\n");
         return DK_ERR;
     }
 
-    if (setlevel == level) {
+    if( setlevel == level){
+        // printk("Same level\n");
         return DK_OK;
     }
 

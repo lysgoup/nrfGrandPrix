@@ -11,7 +11,7 @@
 
 #define MAX_LED_MATRIX_COL 16
 #define MAX_LED_MATRIX_ROW 8
-#define MAP_LENGTH 6
+#define MAP_INTERVAL 6
 
 #define TENS_START_INDEX 0
 #define UNITS_START_INDEX 8
@@ -44,3 +44,4 @@ void led_on_seconds(int seconds);
 void led_on_status(int type);
 void led_blink_status(int type, uint32_t on_time, uint32_t off_time);
 int show_map(int second, int pos);
+int getMapLength();

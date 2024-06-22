@@ -1,9 +1,10 @@
 #include "./include/led.h"
 #include "./include/value.h"
 #include "./include/batteryDisplay.h"
-int number_led_matrix_arr [MAX_LED_MATRIX_IDX+1][MAX_LED_MATRIX_NUM+1];
-int led_matrix_arr [3][MAX_LED_NUM+1];
+int number_led_matrix_arr [MAX_LED_MATRIX_IDX][MAX_LED_MATRIX_NUM];
+int led_matrix_arr [3][MAX_LED_NUM];
 int led_map [MAX_LED_MATRIX_ROW][MAX_LED_MATRIX_COL*6];
+int mapLength = MAX_LED_MATRIX_COL * MAP_INTERVAL;
 
 int carPose = MID;
 int last_start_col;
@@ -39,7 +40,7 @@ void led_mid(int on, int offset){
 }
 
 void led_top(int on, int offset){
-    for(int i = 1; i < 19 ; i+=16){
+    for(int i = 1; i < 20 ; i+=16){
         for(int j = i ; j < i+3 ; j++){
             if(j==18) continue;
             if(on) led_on(led, j+offset);
@@ -49,7 +50,7 @@ void led_top(int on, int offset){
 }
 
 void led_bot(int on, int offset){
-    for(int i = 97; i < 115 ; i+=16){
+    for(int i = 97; i < 116 ; i+=16){
         for(int j = i ; j < i+3 ; j++){
             if(j==114) continue;
             if(on) led_on(led, j+offset);
@@ -126,7 +127,7 @@ void led_on_status(int type){
 }
 
 void led_blink_status(int type, uint32_t on_time, uint32_t off_time){
-    for(int i = 0 ; i <=MAX_LED_NUM; i++){
+    for(int i = 0 ; i <MAX_LED_NUM; i++){
         if(led_matrix_arr[type][i]){
             led_blink(led, i, on_time, off_time);
         }
@@ -138,7 +139,7 @@ void led_blink_status(int type, uint32_t on_time, uint32_t off_time){
 int check_collision(int carX, int carY) { // top-left point of the car
     for (int i = 0; i <= 2; i++) {
         if (led_map[carX][carY + i] == 1 || led_map[carX+1][carY + i] == 1) {
-            return -1;
+            return 2; // Fail
         }
     }
     return 0;
@@ -166,8 +167,8 @@ int show_map(int second, int move){
         printk("offset: %d\n",car_offset);
     }
     else{
-        start_col = second % (MAX_LED_MATRIX_COL * MAP_LENGTH + 1 - MAX_LED_MATRIX_COL); // 시작 열 계산
-        if((start_col+1)%(MAX_LED_MATRIX_COL * MAP_LENGTH + 1 - MAX_LED_MATRIX_COL)  == 0){
+        start_col = second % (mapLength + 1 - MAX_LED_MATRIX_COL); // 시작 열 계산
+        if((start_col+1)%(mapLength + 1 - MAX_LED_MATRIX_COL)  == 0){
             last_start_col = start_col;
         }
     }
@@ -184,7 +185,6 @@ int show_map(int second, int move){
     }
 
     if(car_offset == 9) return 1;
-
     // CAR
 
     // Car Movement Check
@@ -219,7 +219,7 @@ int show_map(int second, int move){
 
 }
 
-int led_matrix_arr [3][MAX_LED_NUM+1]= {
+int led_matrix_arr [3][MAX_LED_NUM]= {
     {//WAIT
         0,0,0,0,0, 0,0,0,0, 0, 0,0,0, 0,0,0,
         0,0,0,0,0, 0,0,0,0, 0, 0,0,0, 0,0,0,
@@ -252,7 +252,7 @@ int led_matrix_arr [3][MAX_LED_NUM+1]= {
     }
 };
 
-int number_led_matrix_arr [MAX_LED_MATRIX_IDX+1][MAX_LED_MATRIX_NUM+1]= {
+int number_led_matrix_arr [MAX_LED_MATRIX_IDX][MAX_LED_MATRIX_NUM]= {
 
     { // 0
         0,0,0,1,1,1,0,0,
@@ -356,7 +356,7 @@ int number_led_matrix_arr [MAX_LED_MATRIX_IDX+1][MAX_LED_MATRIX_NUM+1]= {
     }
 };
 
-int led_map [8][MAX_LED_MATRIX_COL*MAP_LENGTH] = {
+int led_map [8][MAX_LED_MATRIX_COL*MAP_INTERVAL] = {
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1},  
     {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -366,3 +366,7 @@ int led_map [8][MAX_LED_MATRIX_COL*MAP_LENGTH] = {
     {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1},  
     {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1}
 };
+
+int getMapLength(){
+    return MAX_LED_MATRIX_COL*MAP_INTERVAL;
+}
