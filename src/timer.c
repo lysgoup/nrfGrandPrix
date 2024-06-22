@@ -13,7 +13,7 @@ int move = STAY;
 bool timer_stopped = true;
 double timer_period = 0.1;
 
-
+extern int busy;
 void isEnd(int status){
 
     if(status==0) return;
@@ -23,11 +23,13 @@ void isEnd(int status){
     led_on_status(status);
     led_blink_status(status, BLINK_ON_TIME, BLINK_OFF_TIME);
     timer_stopped = true;
+    busy=0;
     stop_joystick_thread();
     display_clear();
     printk("Game Done\n");  
 
 }
+
 
 void my_work_handler(struct k_work *work)
 {
