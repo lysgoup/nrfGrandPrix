@@ -5,7 +5,7 @@ int number_led_matrix_arr [MAX_LED_MATRIX_IDX][MAX_LED_MATRIX_NUM];
 int led_matrix_arr [3][MAX_LED_NUM];
 int led_map [MAX_LED_MATRIX_ROW][MAX_LED_MATRIX_COL*MAP_INTERVAL];
 int mapLength = MAX_LED_MATRIX_COL * MAP_INTERVAL;
-int co2_error[MAX_LED_MATRIX_NUM+1];
+int error_sign[MAX_LED_MATRIX_NUM+1];
 
 int carPose = MID;
 int last_start_col;
@@ -116,13 +116,13 @@ void led_on_seconds(int num)
     }
 }
 
-void led_on_co2_value(int value){
+void led_on_percentage(int value){
     int level = 16 * value / 100;
-    if(value == 0){
+    if(level < 1){
         int num_arr_idx = 0;
         for(int i = 0; i < MAX_LED_NUM; i+=16){
             for(int j = i; j < (i+8); j++){
-                if(co2_error[num_arr_idx] == 1){
+                if(error_sign[num_arr_idx] == 1){
                     led_on(led, j);
                 } else {
                     led_off(led, j);
@@ -133,7 +133,7 @@ void led_on_co2_value(int value){
         num_arr_idx = 0;
         for(int i = 0; i < MAX_LED_NUM; i+=16){
             for(int j = (i+8); j < (i+16); j++){
-                if(co2_error[num_arr_idx] == 1){
+                if(error_sign[num_arr_idx] == 1){
                     led_on(led, j);
                 } else {
                     led_off(led, j);
@@ -396,7 +396,7 @@ int number_led_matrix_arr [MAX_LED_MATRIX_IDX][MAX_LED_MATRIX_NUM]= {
     }
 };
 
-int co2_error[MAX_LED_MATRIX_NUM+1] = {
+int error_sign[MAX_LED_MATRIX_NUM+1] = {
     1,0,0,0,0,0,0,1,
     0,1,0,0,0,0,1,0,
     0,0,1,0,0,1,0,0,

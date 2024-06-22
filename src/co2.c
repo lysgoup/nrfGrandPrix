@@ -163,7 +163,7 @@ void serial_write() {
 void co2_work_handler(struct k_work *work){
   printk("Enter co2_work_handler: %d\n",co2_percent);
   busy = 1;
-  led_on_co2_value(co2_percent);
+  led_on_percentage(co2_percent);
   k_sleep(K_SECONDS(3));
   co2_work_pending = false;
   busy=0;

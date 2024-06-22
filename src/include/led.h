@@ -41,7 +41,7 @@ static const struct device *const led = DEVICE_DT_GET(LED_NODE);
 
 int led_init(void);
 void led_on_seconds(int seconds);
-void led_on_co2_value(int value);
+void led_on_percentage(int value);
 void led_on_status(int type);
 void led_blink_status(int type, uint32_t on_time, uint32_t off_time);
 int show_map(int second, int pos);
