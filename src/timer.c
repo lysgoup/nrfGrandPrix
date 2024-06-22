@@ -31,6 +31,7 @@ void isEnd(int status){
 
 void my_work_handler(struct k_work *work)
 {
+    printk("seconds: %d\n", seconds);
     if(seconds==0){
         for(int i=3;i>0;i--){
             led_on_seconds(i);
