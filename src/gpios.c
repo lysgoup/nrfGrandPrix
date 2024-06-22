@@ -4,6 +4,7 @@
 #include "./include/timer.h"
 #include "./include/led.h"
 #include "./include/batteryDisplay.h"
+#include "./include/sound.h"
 
 static struct gpio_callback button0_cb_data; // Game 진입
 static struct gpio_callback button1_cb_data;
@@ -40,10 +41,14 @@ void button1_callback(const struct device *dev, struct gpio_callback *cb, uint32
 void button2_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
     printk("Button 2 pressed\n");
-    if(busy==1){
-        return;
+    if(sound_mode_on && busy){
+        printk("turning off sound mode\n"); 
+        turn_off_sound_mode();
     }
-    
+    else if(!sound_mode_on && !busy){
+        printk("turning on sound mode\n"); 
+        turn_on_sound_mode();
+    }
 }
 
 void button3_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)

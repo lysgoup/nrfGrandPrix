@@ -5,6 +5,18 @@
 #include "./include/sound.h"
 #include "./include/value.h"
 
+struct k_work sound_work;
+bool sound_work_pending;
+int sound_percent;
+bool sound_mode_on;
+extern int busy;
+
+struct adc_sequence sequence = {
+    .buffer = buf,
+    .buffer_size = sizeof(buf),
+    .resolution = 10, // 10비트 해상도 설정
+};
+
 int map(int x, int in_min, int in_max, int out_min, int out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
@@ -22,32 +34,51 @@ int sound_init(){
       return DK_ERR;
     }
   }
+  sound_work_pending = false;
+  sound_mode_on = false;
+  sound_percent = 0;
+  k_work_init(&sound_work, sound_work_handler);
   return DK_OK;
 }
 
-// int main(void)
-// {
-//     while (1) {
-//         (void)adc_sequence_init_dt(&adc_channels[0], &sequence);
-//         int err = adc_read(adc_channels[0].dev, &sequence);
-//         if (err < 0) {
-//             printk("Could not read (%d)\n", err);
-//             k_sleep(K_MSEC(100));
-//             continue;
-//         }
+void turn_on_sound_mode(){
+  if (!sound_work_pending) {
+    sound_work_pending = true;
+    k_work_submit(&sound_work);
+  }
+}
 
-//         // 버퍼의 첫 번째 값을 읽어 sound_value로 저장
-//         int32_t sound_value = buf[0]; 
-//         // sound_value가 부호 없는 정수로 잘못 해석되는 경우를 방지
-//         if (sound_value < 0 || sound_value >= SENSOR_INVALID_VALUE) {
-//             printk("sound_value: invalid data %" PRIi32 "\n", sound_value);
-//             k_sleep(K_MSEC(100));
-//             continue;
-//         }
+void turn_off_sound_mode(){
+  sound_mode_on = false;
+}
 
-//         int sound_level = map(sound_value, MIN_SENSORVALUE, MAX_SENSORVALUE, 0, 100); // 0-100 범위로 매핑
-//         printk("sound_value: %" PRIi32 " sound_level: %d\n", sound_value, sound_level);
-//         k_sleep(K_MSEC(100));
-//     }
-//     return 0;
-// }
+void sound_work_handler(struct k_work *work){
+  printk("Enter sound_work_handler: %d\n",sound_percent);
+  sound_mode_on = true;
+  busy = 1;
+  while(sound_mode_on){
+    (void)adc_sequence_init_dt(&adc_channels[2], &sequence);
+    int err = adc_read(adc_channels[2].dev, &sequence);
+    if (err < 0) {
+        printk("Could not read (%d)\n", err);
+        k_sleep(K_MSEC(100));
+        continue;
+    }
+
+    // 버퍼의 첫 번째 값을 읽어 sound_value로 저장
+    int32_t sound_value = buf[0]; 
+    // sound_value가 부호 없는 정수로 잘못 해석되는 경우를 방지
+    if (sound_value < 0 || sound_value >= SENSOR_INVALID_VALUE) {
+        printk("sound_value: invalid data %" PRIi32 "\n", sound_value);
+        k_sleep(K_MSEC(100));
+        continue;
+    }
+
+    int sound_level = map(sound_value, MIN_SENSORVALUE, MAX_SENSORVALUE, 0, 100); // 0-100 범위로 매핑
+    printk("sound_value: %" PRIi32 " sound_level: %d\n", sound_value, sound_level);
+    k_sleep(K_MSEC(100));
+  }
+  sound_work_pending = false;
+  busy=0;
+  printk("Leaving sound_work_handler\n");
+}

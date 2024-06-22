@@ -6,6 +6,7 @@
   "files.associations": {
     "printk.h": "c",
     "string.h": "c",
-    "kernel.h": "c"
+    "kernel.h": "c",
+    "uart.h": "c"
   }
 }

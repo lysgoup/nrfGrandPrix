@@ -68,11 +68,11 @@ int configuration(){
         }
 
         // INIT sound sensor
-        // ret = sound_init();
-        // if(ret != DK_OK){
-        //         printk("Error initializing Sound Sensor\n");
-        //         return DK_ERR;
-        // }
+        ret = sound_init();
+        if(ret != DK_OK){
+                printk("Error initializing Sound Sensor\n");
+                return DK_ERR;
+        }
 
         return DK_OK;
 }
