@@ -82,7 +82,7 @@ int main(void)
         }
 
         while(1) {
-                if(timer_stopped){
+                if(!busy){
                         led_on_status(WAIT);
                 }
                 k_sleep(K_MSEC(100));

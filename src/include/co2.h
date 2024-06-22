@@ -5,6 +5,7 @@
 
 #define MSG_SIZE 9
 #define CO2_MULTIPLIER 256
+#define CO2_MAX_VALUE 10000
 
 //K_MSGQ_DEFINE(uart_msgq, MSG_SIZE, 10, 4);
 
@@ -29,5 +30,6 @@ uint8_t check_uart_fsm(uint8_t reset, uint8_t read_data);
 unsigned char getCheckSum(char *packet);
 void serial_callback(const struct device *dev, void *user_data);
 void serial_write();
+void co2_work_handler(struct k_work *work);
 
 #endif
