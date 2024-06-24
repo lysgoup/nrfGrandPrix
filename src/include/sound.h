@@ -19,7 +19,7 @@ static const struct adc_dt_spec adc_channels[] = {
 };
 
 int sound_init();
-int map(int x, int in_min, int in_max, int out_min, int out_max);
+// int map(int x, int in_min, int in_max, int out_min, int out_max);
 void turn_on_sound_mode();
 void sound_work_handler(struct k_work *work);
 

@@ -12,15 +12,17 @@ int sound_percent;
 bool sound_mode_on;
 extern int busy;
 
+extern int map(int x, int in_min, int in_max, int out_min, int out_max);
+
 struct adc_sequence sequence = {
     .buffer = buf,
     .buffer_size = sizeof(buf),
     .resolution = 10, // 10비트 해상도 설정
 };
 
-int map(int x, int in_min, int in_max, int out_min, int out_max) {
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
+// int map(int x, int in_min, int in_max, int out_min, int out_max) {
+//     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+// }
 
 int sound_init(){
   for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
@@ -51,6 +53,7 @@ void turn_on_sound_mode(){
 
 void turn_off_sound_mode(){
   sound_mode_on = false;
+
 }
 
 void sound_work_handler(struct k_work *work){
@@ -58,6 +61,7 @@ void sound_work_handler(struct k_work *work){
   sound_mode_on = true;
   busy = 1;
   while(sound_mode_on){
+    printk("check: %d\n",sound_mode_on);
     (void)adc_sequence_init_dt(&adc_channels[2], &sequence);
     int err = adc_read(adc_channels[2].dev, &sequence);
     if (err < 0) {
@@ -74,7 +78,7 @@ void sound_work_handler(struct k_work *work){
         k_sleep(K_MSEC(100));
         continue;
     }
-
+    printk("detected: %d\n",sound_value);
     int sound_level = map(sound_value, MIN_SENSORVALUE, MAX_SENSORVALUE, 0, 100); // 0-100 범위로 매핑
     printk("sound_value: %" PRIi32 " sound_level: %d\n", sound_value, sound_level);
     led_on_percentage(sound_level);
