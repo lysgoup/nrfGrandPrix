@@ -53,6 +53,7 @@ void turn_on_sound_mode(){
 
 void turn_off_sound_mode(){
   sound_mode_on = false;
+
 }
 
 void sound_work_handler(struct k_work *work){
@@ -60,6 +61,7 @@ void sound_work_handler(struct k_work *work){
   sound_mode_on = true;
   busy = 1;
   while(sound_mode_on){
+    printk("check: %d\n",sound_mode_on);
     (void)adc_sequence_init_dt(&adc_channels[2], &sequence);
     int err = adc_read(adc_channels[2].dev, &sequence);
     if (err < 0) {

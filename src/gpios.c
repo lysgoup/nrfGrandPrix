@@ -44,10 +44,12 @@ void button2_callback(const struct device *dev, struct gpio_callback *cb, uint32
     if(sound_mode_on && busy){
         printk("turning off sound mode\n"); 
         turn_off_sound_mode();
+        printk("sound mode on: %d, busy: %d\n",sound_mode_on,busy);
     }
     else if(!sound_mode_on && !busy){
         printk("turning on sound mode\n"); 
         turn_on_sound_mode();
+        printk("sound mode on: %d, busy: %d\n",sound_mode_on,busy);
     }
 }
 
