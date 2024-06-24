@@ -3,6 +3,7 @@
 #include "./include/joy.h"
 #include "./include/buzzer.h"
 #include "./include/batteryDisplay.h"
+#include "./include/ble.h"
 #include <math.h>
 
 struct k_timer my_timer;
@@ -13,15 +14,26 @@ int move = STAY;
 bool timer_stopped = true;
 double timer_period = 0.1;
 
+uint32_t score = 0;
+
 extern int busy;
+
 void isEnd(int status){
 
     if(status==0) return;
 
     k_timer_stop(&my_timer);
+
+
+    char message[100];
+    score = seconds * 100;
+    snprintf(message, sizeof(message), "Score: %d", score);
+    my_service_send(my_connection, (uint32_t *)message, strlen(message));
+
     seconds = 0;
     led_on_status(status);
     led_blink_status(status, BLINK_ON_TIME, BLINK_OFF_TIME);
+    
     timer_stopped = true;
     busy=0;
     stop_joystick_thread();

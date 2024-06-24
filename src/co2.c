@@ -11,6 +11,7 @@
 #include "./include/value.h"
 #include "./include/co2.h"
 #include "./include/led.h"
+#include "./include/ble.h"
 
 struct k_work co2_work;
 int co2_percent;
@@ -133,6 +134,10 @@ void serial_callback(const struct device *dev, void *user_data) {
         low = rx_buf[3];
         int ppm = (high * CO2_MULTIPLIER) + low;
         printk("CO2: %d ppm (high = %d, low = %d)\n", ppm , high, low);
+		
+		char message[100];
+		snprintf(message, sizeof(message), "CO2: %d ppm", ppm);
+        my_service_send(my_connection, (uint32_t *)message, strlen(message));
         co2_percent = (float)ppm / CO2_MAX_VALUE * 100;
         printk("check: %d\n",co2_percent);
         // print message buffer

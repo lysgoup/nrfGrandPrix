@@ -13,6 +13,7 @@
 #include "./include/batteryDisplay.h"
 #include "./include/co2.h"
 #include "./include/sound.h"
+#include "./include/ble.h"
 
 int busy;
 
@@ -75,6 +76,14 @@ int configuration(){
                 return DK_ERR;
         }
 
+        // INIT BLE
+        ret = ble_init();
+        if(ret != DK_OK){
+                printk("Error initializing BLE\n");
+                return DK_ERR;
+        }
+
+        display_clear();
         return DK_OK;
 }
 
@@ -88,7 +97,7 @@ int main(void)
                 printk("Configuration Error");
                 return DK_ERR;
         }
-
+        
         while(1) {
                 if(!busy){
                         led_on_status(WAIT);

@@ -5,6 +5,7 @@
 #include "./include/sound.h"
 #include "./include/value.h"
 #include "./include/led.h"
+#include "./include/ble.h"
 
 struct k_work sound_work;
 bool sound_work_pending;
@@ -82,6 +83,11 @@ void sound_work_handler(struct k_work *work){
     int sound_level = map(sound_value, MIN_SENSORVALUE, MAX_SENSORVALUE, 0, 100); // 0-100 범위로 매핑
     printk("sound_value: %" PRIi32 " sound_level: %d\n", sound_value, sound_level);
     led_on_percentage(sound_level);
+
+
+    char message[100];
+    snprintf(message, sizeof(message), "Sound Level: %d", sound_level);
+    my_service_send(my_connection, (uint32_t *)message, strlen(message));
     k_sleep(K_MSEC(500));
   }
   sound_work_pending = false;
