@@ -12,10 +12,8 @@ static int16_t buf[ADC_BUFFER_SIZE]; // ADC 값을 저장할 버퍼
 extern bool sound_mode_on;
 
 
-static const struct adc_dt_spec adc_channels[] = {
-    ADC_DT_SPEC_GET_BY_IDX(DT_PATH(zephyr_user), 0),
-    ADC_DT_SPEC_GET_BY_IDX(DT_PATH(zephyr_user), 1),
-    ADC_DT_SPEC_GET_BY_IDX(DT_PATH(zephyr_user), 2),
+static const struct adc_dt_spec sound_adc_channels[] = {
+    ADC_DT_SPEC_GET_BY_IDX(DT_PATH(zephyr_user), 2)
 };
 
 int sound_init();

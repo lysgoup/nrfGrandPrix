@@ -25,13 +25,13 @@ struct adc_sequence sequence = {
 // }
 
 int sound_init(){
-  for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
-    if (!adc_is_ready_dt(&adc_channels[i])) {
-      printk("ADC controller device %s not ready\n", adc_channels[i].dev->name);
+  for (size_t i = 0U; i < ARRAY_SIZE(sound_adc_channels); i++) {
+    if (!adc_is_ready_dt(&sound_adc_channels[i])) {
+      printk("ADC controller device %s not ready\n", sound_adc_channels[i].dev->name);
       return DK_ERR;
     }
 
-    int err = adc_channel_setup_dt(&adc_channels[i]);
+    int err = adc_channel_setup_dt(&sound_adc_channels[i]);
     if (err < 0) {
       printk("Could not setup channel #%d (%d)\n", i, err);
       return DK_ERR;
@@ -62,8 +62,8 @@ void sound_work_handler(struct k_work *work){
   busy = 1;
   while(sound_mode_on){
     printk("check: %d\n",sound_mode_on);
-    (void)adc_sequence_init_dt(&adc_channels[2], &sequence);
-    int err = adc_read(adc_channels[2].dev, &sequence);
+    (void)adc_sequence_init_dt(&sound_adc_channels[2], &sequence);
+    int err = adc_read(sound_adc_channels[2].dev, &sequence);
     if (err < 0) {
         printk("Could not read (%d)\n", err);
         k_sleep(K_MSEC(100));

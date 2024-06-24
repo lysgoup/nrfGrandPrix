@@ -34,7 +34,7 @@ int32_t nowX = MIDDLE, nowY = MIDDLE; // Initial Position
     ADC_DT_SPEC_GET_BY_IDX(node_id, idx),
 
 /* Data of ADC io-channels specified in devicetree. */
-const struct adc_dt_spec adc_channels[] = {
+const struct adc_dt_spec joy_adc_channels[] = {
     DT_FOREACH_PROP_ELEM(DT_PATH(zephyr_user), io_channels,
                          DT_SPEC_AND_COMMA)
 };
@@ -58,8 +58,8 @@ void read_adc(const struct adc_dt_spec *adc_channel, int32_t *value)
 void joystick_thread(void *arg1, void *arg2, void *arg3)
 {
     while (!stop_thread) {
-        //read_adc(&adc_channels[0], &nowX);
-        read_adc(&adc_channels[1], &nowY);
+        //read_adc(&joy_adc_channels[0], &nowX);
+        read_adc(&joy_adc_channels[1], &nowY);
 
         if(nowY == ADC_MAX) nowY = MIDDLE;
         else if(nowY > 65500) nowY = 0;
@@ -100,14 +100,14 @@ int joystick_init(void)
 {
     int err;
 
-    // ADC 채널 초기화
-    for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
-        if (!adc_is_ready_dt(&adc_channels[i])) {
-            printk("ADC controller device %s not ready\n", adc_channels[i].dev->name);
+    // Joystick용 ADC 채널 초기화
+    for (size_t i = 0U; i < ARRAY_SIZE(joy_adc_channels)-1; i++) {
+        if (!adc_is_ready_dt(&joy_adc_channels[i])) {
+            printk("ADC controller device %s not ready\n", joy_adc_channels[i].dev->name);
             return -1;
         }
 
-        err = adc_channel_setup_dt(&adc_channels[i]);
+        err = adc_channel_setup_dt(&joy_adc_channels[i]);
         if (err < 0) {
             printk("Could not setup channel #%d (%d)\n", i, err);
             return -1;

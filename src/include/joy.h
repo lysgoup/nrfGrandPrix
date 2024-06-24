@@ -6,7 +6,7 @@
 #include <zephyr/drivers/adc.h>
 
 // 외부에서 접근 가능한 전역 변수
-extern const struct adc_dt_spec adc_channels[];
+extern const struct adc_dt_spec joy_adc_channels[];
 
 bool isChange(void);
 void read_adc(const struct adc_dt_spec *adc_channel, int32_t *value);

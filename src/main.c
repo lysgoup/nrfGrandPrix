@@ -12,6 +12,7 @@
 #include "./include/rotary.h"
 #include "./include/batteryDisplay.h"
 #include "./include/co2.h"
+#include "./include/sound.h"
 
 int busy;
 
