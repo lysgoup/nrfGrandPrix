@@ -1,5 +1,6 @@
 #include "./include/rotary.h"
 #include "./include/led.h"
+#include "./include/batteryDisplay.h"
 
 K_THREAD_STACK_DEFINE(rotary_stack, STACK_SIZE);
 struct k_thread rotary_thread_data;
