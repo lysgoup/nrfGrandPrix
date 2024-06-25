@@ -1,8 +1,9 @@
-Source writer: Yunseo Lee, Wonbin Lee
-Last Update: 2024/06/25
+**Source writer** : Yunseo Lee, Wonbin Lee
+**Last Update** : 2024/06/25
 
-Project Name : [NRF GrandPrix]
-Description : This is a project making Car Racing Gaming device which also can detect the information of circumstances using nrf52840 board and Zephyr RTOS.
+**Project Name** : [NRF GrandPrix]
+
+**Description** : This is a project making Car Racing Gaming device which also can detect the information of circumstances using nrf52840 board and Zephyr RTOS.
 
 
 # Project Structure and Details
@@ -18,40 +19,40 @@ This document provides step-by-step instructions on how to build and use the pro
 
 **/src**
 
-- batteryDisplay.c: Arduino Rich Shield Board Battery Display Code
-This file contains code to interface with the battery display on the Arduino Rich Shield Board. It includes functions to initialize the display, set brightness levels, and update the display to show the current battery status.
-
-- ble.c: BLE Communication Code with Mobile Phone
-This file handles Bluetooth Low Energy (BLE) communication between the nRF52840 and a mobile phone. It includes initialization of the BLE stack, setting up GATT services and characteristics, and managing connections and data transfers.
-
-- buzzer.c: Code for Buzzer Connected to nRF52840
-This file contains code to control a buzzer connected to the nRF52840. It includes initialization of PWM settings and functions to play different tones and sound patterns.
-
-- co2.c: CO2 Sensor Code
-This file interfaces with a CO2 sensor connected to the nRF52840. It includes sensor initialization, reading CO2 levels, and processing sensor data for further use in the application.
-
-- gpios.c: GPIO Configuration Code
-This file manages the configuration of General-Purpose Input/Output (GPIO) pins on the nRF52840. It includes setting up button interrupts, configuring pin modes, and handling GPIO callbacks for various input events.
-
-- joy.c: Arduino Rich Shield Board Joystick Code
-This file contains code to interface with the joystick on the Arduino Rich Shield Board. It includes ADC reading functions, joystick position tracking, and event handling for joystick movements.
-
-- led.c: Arduino Rich Shield Board LED Matrix Code
-This file manages the LED matrix on the Arduino Rich Shield Board. It includes functions to initialize the LED matrix, set LED states, and display patterns or animations on the matrix.
-
-- main.c: Main Thread
+- **main.c**: Main Thread<br>
 This file contains the main entry point and primary execution loop for the application. It initializes the system, starts necessary threads, and manages the overall control flow of the program.
 
-- map.s: Assembly Function for Mapping Sound Values
+- **batteryDisplay.c** : Arduino Rich Shield Board Battery Display Code<br>
+This file contains code to interface with the battery display on the Arduino Rich Shield Board. It includes functions to initialize the display, set brightness levels, and update the display to show the current battery status.
+
+- **ble.c** : BLE Communication Code with Mobile Phone<br>
+This file handles Bluetooth Low Energy (BLE) communication between the nRF52840 and a mobile phone. It includes initialization of the BLE stack, setting up GATT services and characteristics, and managing connections and data transfers.
+
+- **buzzer.c** : Code for Buzzer Connected to nRF52840 <br>
+This file contains code to control a buzzer connected to the nRF52840. It includes initialization of PWM settings and functions to play different tones and sound patterns.
+
+- **co2.c** : CO2 Sensor Code<br>
+This file interfaces with a CO2 sensor connected to the nRF52840. It includes sensor initialization, reading CO2 levels, and processing sensor data for further use in the application.
+
+- **gpios.c**: GPIO Configuration Code<br>
+This file manages the configuration of General-Purpose Input/Output (GPIO) pins on the nRF52840. It includes setting up button interrupts, configuring pin modes, and handling GPIO callbacks for various input events.
+
+- **joy.c**: Arduino Rich Shield Board Joystick Code<br>
+This file contains code to interface with the joystick on the Arduino Rich Shield Board. It includes ADC reading functions, joystick position tracking, and event handling for joystick movements.
+
+- **led.c**: Arduino Rich Shield Board LED Matrix Code<br>
+This file manages the LED matrix on the Arduino Rich Shield Board. It includes functions to initialize the LED matrix, set LED states, and display patterns or animations on the matrix.
+
+- **map.s**: Assembly Function for Mapping Sound Values<br>
 This assembly file includes functions to map sound values for the application. It provides low-level routines for sound data processing and conversion.
 
-- rotary.c: Arduino Rich Shield Board Rotary Encoder Code
+- **rotary.c**: Arduino Rich Shield Board Rotary Encoder Code<br>
 This file interfaces with the rotary encoder on the Arduino Rich Shield Board. It includes initialization of the encoder, handling rotation events, and updating related application states based on encoder input.
 
-- sound.c: Arduino Rich Shield Board Sound Code
+- **sound.c**: Arduino Rich Shield Board Sound Code<br>
 This file manages sound-related functionalities for the Arduino Rich Shield Board. It includes playing sound effects, controlling volume, and interfacing with sound hardware components.
 
-- timer.c: Code for Timing Frames During Game Execution
+- **timer.c**: Code for Timing Frames During Game Execution<br>
 This file handles the timing of frames during game execution. It includes setting up timers, managing frame rates, and ensuring that game frames are rendered at consistent intervals.
 
 
