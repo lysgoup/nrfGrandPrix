@@ -3,7 +3,7 @@
 
 **Project Name** : [NRF GrandPrix]
 
-**Description** : This is a project making Car Racing Gaming device which also can detect the information of circumstances using nrf52840 board and Zephyr RTOS.
+**Description** : This is a project making Car Racing Gaming device which also can detect the information of circumstances using nrf52840 board and Zephyr RTOS. [Video](https://youtu.be/Pc7PPx0V5LA)
 
 
 # Project Structure and Details
